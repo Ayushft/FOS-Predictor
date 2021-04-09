@@ -1,8 +1,9 @@
 #Inputs
 import time
-import math 
+import math
 import pandas as pd
 import numpy as np
+from fpdf import FPDF, HTMLMixin
 
 matdata = {
     'Material' : ['Aluminum','Brass','Bronze','Copper','Stainless Steel'],
@@ -21,13 +22,61 @@ matdb = pd.DataFrame(matdata)
 matdb.set_index('Material',inplace=True)
 print(matdb)
 
+flag = True
+while flag:
+    decision = input("Do you wish to choose the material from database? ").lower()
+    if decision == "yes":
+        choice = input("Type your selection: Aluminium, Brass, Bronze, Copper, Stainless Steel : ")
+        if choice.lower() == "aluminium":
+            sigma_yt = float(matdata["Tensile Yield Strength"][0])
+            sigma_yc = float(matdata["Compressive Yield Strength"][0])
+            sigma_ut = float(matdata["Ultimate Tensile Strength"][0])
+            sigma_uc = float(matdata["Ultimate Compressive Strength"][0])
+            print("Material data taken from database.")
+
+        elif choice.lower() == "brass":
+            sigma_yt = float(matdata["Tensile Yield Strength"][1])
+            sigma_yc = float(matdata["Compressive Yield Strength"][1])
+            sigma_ut = float(matdata["Ultimate Tensile Strength"][1])
+            sigma_uc = float(matdata["Ultimate Compressive Strength"][1])
+            print("Material data taken from database.")
+        elif choice.lower() == "bronze":
+            sigma_yt = float(matdata["Tensile Yield Strength"][2])
+            sigma_yc = float(matdata["Compressive Yield Strength"][2])
+            sigma_ut = float(matdata["Ultimate Tensile Strength"][2])
+            sigma_uc = float(matdata["Ultimate Compressive Strength"][2])
+            print("Material data taken from database.")
+
+        elif choice.lower() == "copper":
+            sigma_yt = float(matdata["Tensile Yield Strength"][3])
+            sigma_yc = float(matdata["Compressive Yield Strength"][3])
+            sigma_ut = float(matdata["Ultimate Tensile Strength"][3])
+            sigma_uc = float(matdata["Ultimate Compressive Strength"][3])
+            print("Material data taken from database.")
+
+        elif choice.lower() == "stainless steel":
+            sigma_yt = float(matdata["Tensile Yield Strength"][4])
+            sigma_yc = float(matdata["Compressive Yield Strength"][4])
+            sigma_ut = float(matdata["Ultimate Tensile Strength"][4])
+            sigma_uc = float(matdata["Ultimate Compressive Strength"][4])
+            print("Material data taken from database.")
+        flag = False
+
+    elif decision == "no":
+        print("Enter the relevant data")
+        sigma_yt = float(input("Please enter the Tensile Yield Strength : "))
+        sigma_yc = float(input("Please enter the Compressive Yield Strength : "))
+        sigma_ut = float(input("Please enter the Ultimate Tension Strength : "))
+        sigma_uc = float(input("Please enter the Ultimate Compressive Strength : "))
+        flag = False
+
+    else:
+        print("Invalid Input; enter only Yes or No")
+
+
 sigma_x = float(input("Please enter the Direct Stress in x-direction : "))
 sigma_y = float(input("Please enter the Direct Stress in y-direction : "))
 tau_xy = float(input("Please enter the Shear Stress in xy plane: "))
-sigma_yt = float(input("Please enter the Tensile Yield Strength : "))
-sigma_yc = float(input("Please enter the Compressive Yield Strength : "))
-sigma_ut = float(input("Please enter the Ultimate Tension Strength : "))
-sigma_uc = float(input("Please enter the Ultimate Compressive Strength : "))
 epsilon_f = float(input("Please enter the True Strain at fracture : "))
 
 def is_conservative():
@@ -144,9 +193,36 @@ print(A)
 # Additional Detailed Results
 def is_additional(additional) :
     if additional == 1:
-        youngsmod = float(input("Please enter the Young's Modulus of the material :"))
-        shearmod = float(input("Please enter the Shear Modulus of the material :"))
-        poisson = float(input("Please enter the Poisson's Ratio of the material :"))
+        if decision == "yes":
+            if choice.lower() == 'aluminium':
+                youngsmod = float(matdb["Youngs Modulus"][0])
+                shearmod = float(matdb["Shear Modulus"][0])
+                poisson = float(matdb["Poissons Ratio"][0])
+
+            elif choice.lower() == 'brass':
+                youngsmod = float(matdb["Youngs Modulus"][1])
+                shearmod = float(matdb["Shear Modulus"][1])
+                poisson = float(matdb["Poissons Ratio"][1])
+
+            elif choice.lower() == 'bronze':
+                youngsmod = float(matdb["Youngs Modulus"][2])
+                shearmod = float(matdb["Shear Modulus"][2])
+                poisson = float(matdb["Poissons Ratio"][2])
+
+            elif choice.lower() == 'copper':
+                youngsmod = float(matdb["Youngs Modulus"][3])
+                shearmod = float(matdb["Shear Modulus"][3])
+                poisson = float(matdb["Poissons Ratio"][3])
+
+            elif choice.lower() == 'stainless steel':
+                youngsmod = float(matdb["Youngs Modulus"][4])
+                shearmod = float(matdb["Shear Modulus"][4])
+                poisson = float(matdb["Poissons Ratio"][4])
+
+        if decision == "no":
+            youngsmod = float(input("Please enter the Young's Modulus of the material : "))
+            shearmod = float(input("Please enter the Shear Modulus of the material : "))
+            poisson = float(input("Please enter the Poisson's Ratio of the material : "))
 
         epsilon_x = ((sigma_x - poisson * sigma_y) / youngsmod)
         epsilon_y = ((sigma_y - poisson * sigma_x) / youngsmod)
@@ -155,33 +231,99 @@ def is_additional(additional) :
         strain_energy = (0.5 * ((sigma_x * epsilon_x) + (sigma_y * epsilon_y) + (tau_xy * gama_xy)))
         bulkmod = (youngsmod / (3 * (1 - 2 * poisson)))
 
-        print("Youngs Modulus of Material :", youngsmod)
-        print("Shear Modulus of Material :", shearmod)
-        print("Poisson's Ratio of the Material :", poisson)
-        print("Bulk modulus of the Material :", bulkmod)
+        print("Youngs Modulus of Material : ", youngsmod)
+        print("Shear Modulus of Material : ", shearmod)
+        print("Poisson's Ratio of the Material : ", poisson)
+        print("Bulk modulus of the Material : ", bulkmod)
         print("Strain Energy :", strain_energy)
-        print("Normal Stress in x-direction :", sigma_x)
-        print("Normal Stress in y-direction :", sigma_y)
-        print("Normal Stress in z-direction :", sigma_z)
-        print("Shear Stress on xy plane :", tau_xy)
-        print("Shear Stress on yz plane :", tau_yz)
-        print("Shear Stress on xz plane :", tau_xz)
-        print("Normal Strain is x direction :", epsilon_x)
-        print("Normal Strain is y direction :", epsilon_y)
-        print("Normal Strain is z direction :", epsilon_z)
-        print("Shear Strain is xy plane :", gama_xy)
-        print("Shear Strain is yz plane :", gama_yz)
-        print("Shear Strain is xz plane :", gama_xz)
-        print("First Principal Normal Stress :", sigma_1)
-        print("Second Principal Normal Stress :", sigma_2)
-        print("Third Principal Normal Stress :", sigma_3)
-        print("Maximum Principal Normal Stress :", sigma_a)
-        print("Minimum Principal Normal Stress :", sigma_b)
-        print("First Principal Shear Stress :", tau_1)
-        print("Second Principal Shear Stress :", tau_2)
-        print("Third Principal Shear Stress :", tau_3)
-        print("Absolute Maximum Shear Stress :", tau_max)
-        print("Absolute Minimum Shear Stress :", tau_min)
+        print("Normal Stress in x-direction : ", sigma_x)
+        print("Normal Stress in y-direction : ", sigma_y)
+        print("Normal Stress in z-direction : ", sigma_z)
+        print("Shear Stress on xy plane : ", tau_xy)
+        print("Shear Stress on yz plane : ", tau_yz)
+        print("Shear Stress on xz plane : ", tau_xz)
+        print("Normal Strain is x direction : ", epsilon_x)
+        print("Normal Strain is y direction : ", epsilon_y)
+        print("Normal Strain is z direction : ", epsilon_z)
+        print("Shear Strain is xy plane : ", gama_xy)
+        print("Shear Strain is yz plane : ", gama_yz)
+        print("Shear Strain is xz plane : ", gama_xz)
+        print("First Principal Normal Stress : ", sigma_1)
+        print("Second Principal Normal Stress : ", sigma_2)
+        print("Third Principal Normal Stress : ", sigma_3)
+        print("Maximum Principal Normal Stress : ", sigma_a)
+        print("Minimum Principal Normal Stress : ", sigma_b)
+        print("First Principal Shear Stress : ", tau_1)
+        print("Second Principal Shear Stress : ", tau_2)
+        print("Third Principal Shear Stress : ", tau_3)
+        print("Absolute Maximum Shear Stress : ", tau_max)
+        print("Absolute Minimum Shear Stress : ", tau_min)
+
+        pdfneed = input("Do you want a PDF generated? ").lower()
+        if pdfneed == 'yes':
+            class PDF(FPDF, HTMLMixin):
+                pass
+
+            pdf = PDF()
+            pdf.add_page()
+            pdf.write_html(f"""
+            <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body style="background-color:blue;">
+<p>Stress Report</p>
+
+ <ul>
+    <li>Youngs Modulus of Material : {youngsmod}</li>
+    <li>Shear Modulus of Material : {shearmod}</li>
+    <li>Poisson's Ratio of the Material : {poisson}</li>
+    <li>Bulk modulus of the Material : {bulkmod}</li>
+    <li>Strain Energy : {strain_energy}</li>
+    <li>Normal Stress in x-direction : {sigma_x}</li>
+    <li>Normal Stress in y-direction : {sigma_y}</li>
+    <li>Normal Stress in z-direction : {sigma_z}</li>
+    <li>Shear Stress on xy plane : {tau_xy}</li>
+    <li>Shear Stress on yz plane : {tau_yz}</li>
+    <li>Shear Stress on xz plane : {tau_xz}</li>
+    <li>Normal Strain is x direction : {epsilon_x}</li>
+    <li>Normal Strain is y direction : {epsilon_y}</li>
+    <li>Normal Strain is z direction : {epsilon_z}</li>
+    <li>Shear Strain is xy plane : {gama_xy}</li>
+    <li>Shear Strain is yz plane : {gama_yz}</li>
+    <li>Shear Strain is xz plane : {gama_xz}</li>
+    <li>First Principal Normal Stress : {sigma_1}</li>
+    <li>Second Principal Normal Stress : {sigma_2}</li>
+    <li>Third Principal Normal Stress : {sigma_3}</li>
+    <li>Maximum Principal Normal Stress : {sigma_a}</li>
+    <li>Minimum Principal Normal Stress : {sigma_b}</li>
+    <li>First Principal Shear Stress : {tau_1}</li>
+    <li>Second Principal Shear Stress : {tau_2}</li>
+    <li>Third Principal Shear Stress : {tau_3}</li>
+    <li>Absolute Maximum Shear Stress : {tau_max}</li>
+    <li>Absolute Minimum Shear Stress : {tau_min}</li>
+</ul>
+
+
+</body>
+</html>""")
+            pdf.output("StressReport.pdf")
+
+
+
+
+
+
+
+
+
+
+
+        else:
+            exit(0)
 
     else:
          exit()
@@ -189,4 +331,3 @@ def is_additional(additional) :
 
 additional = int(input("please type 1 for Additional Detailed Results or 0 to exit : "))
 is_additional(additional)
-
