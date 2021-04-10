@@ -108,63 +108,77 @@ tau_max = max((tau_1,tau_2,tau_3))
 tau_min = min((tau_1,tau_2,tau_3))
 
 #branching the practices
+method = 0
 def practice_1() :
-    variable1 = "Factor of safety using Modified Mohr Theory is :"
+    variable = "Factor of safety using Modified Mohr Theory is : "
     if sigma_a >= sigma_b >= 0 :
         fos_1 = sigma_ut / sigma_a
-        return (variable1+ str(fos_1))
+        variable += str(fos_1)
+        return variable
     elif sigma_a >= 0 >= sigma_b :
         fos_1 = ((((sigma_uc - sigma_ut) * sigma_a) / (sigma_uc * sigma_ut)) - (sigma_b / sigma_uc)) ** -1
-        return (variable1+ str(fos_1))
+        variable  +=  str(fos_1)
+        return variable
     elif 0 >= sigma_a >= sigma_b :
         fos_1 = (-sigma_uc/ sigma_b)
-        return (variable1+ str(fos_1))
+        variable += str(fos_1)
+        return variable
     return
 
 def practice_2() :
-    variable2 = "Factor of safety using Brittle Coulomb Mohr Theory is :"
+    variable = "Factor of safety using Brittle Coulomb Mohr Theory is : "
     if sigma_a >= sigma_b >= 0 :
         fos_2 = sigma_ut / sigma_a
-        return (variable2 + str(fos_2))
+        variable += str(fos_2)
+        return variable
     elif sigma_a >= 0 >= sigma_b :
         fos_2 = (((sigma_uc * sigma_a) - (sigma_ut*sigma_b)) / (sigma_ut*sigma_uc)) ** -1
-        return (variable2 + str(fos_2))
+        variable += str(fos_2)
+        return variable
     elif 0 >= sigma_a >= sigma_b :
         fos_2 = (-sigma_uc/ sigma_b)
-        return (variable2 + str(fos_2))
+        variable += str(fos_2)
+        return variable
     return
 
 def practice_3() :
-    variable3 = "Factor of safety using Ductile Coulomb Mohr Theory is :"
+    variable = "Factor of safety using Ductile Coulomb Mohr Theory is : "
     if sigma_a >= sigma_b >= 0 :
         fos_3 = sigma_yt / sigma_a
-        return (variable3 + str(fos_3))
+        variable += str(fos_3)
+        return variable
     elif sigma_a >= 0 >= sigma_b :
         fos_3 = (((sigma_yc * sigma_a) - (sigma_yt*sigma_b)) / (sigma_yt*sigma_yc)) ** -1
-        return (variable3 + str(fos_3))
+        variable += str(fos_3)
+        return variable
     elif 0 >= sigma_a >= sigma_b :
         fos_3 = (-sigma_yc/ sigma_b)
-        return (variable3 + str(fos_3))
+        variable += str(fos_3)
+        return variable
     return
 
 def practice_4() :
-    variable4 = "Factor of safety using Distortion Energy Theory is :"
+    variable = "Factor of safety using Distortion Energy Theory is : "
     if sigma_a >= sigma_b :
         fos_4 = sigma_yt / (((sigma_a ** 2) - (sigma_a * sigma_b) + (sigma_b ** 2)) ** 0.5)
-        return (variable4 + str(fos_4))
+        variable += str(fos_4)
+        return variable
     return
 
 def practice_5() :
-    variable5 = "Factor of safety using Maximum Shear Stress Theory is :"
+    variable = "Factor of safety using Maximum Shear Stress Theory is : "
     if sigma_a >= sigma_b >= 0 :
         fos_5 = sigma_yt/ sigma_a
-        return (variable5 + str(fos_5))
+        variable += str(fos_5)
+        return variable
     elif sigma_a >= 0 >= sigma_b :
         fos_5 = sigma_yt / (sigma_a - sigma_b)
-        return (variable5 + str(fos_5))
+        variable += str(fos_5)
+        return variable
     elif 0 >= sigma_a >= sigma_b :
         fos_5 = -sigma_yt / sigma_b
-        return (variable5 + str(fos_5))
+        variable += str(fos_5)
+        return variable
     return
 
 
@@ -274,15 +288,21 @@ def is_additional(additional) :
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 </head>
-<body style="background-color:blue;">
-<p>Stress Report</p>
-
- <ul>
+<body>
+<h2> Stress Report </h2>
+<br>
+ <h3>Material Properties</h3>
+ <br>
+<ul>
     <li>Youngs Modulus of Material : {youngsmod}</li>
     <li>Shear Modulus of Material : {shearmod}</li>
-    <li>Poisson's Ratio of the Material : {poisson}</li>
     <li>Bulk modulus of the Material : {bulkmod}</li>
-    <li>Strain Energy : {strain_energy}</li>
+    <li>Poisson's Ratio of the Material : {poisson}</li>
+</ul>
+<br>
+<h3>Stress and Strain Condition</h3>
+<br>
+<ul>
     <li>Normal Stress in x-direction : {sigma_x}</li>
     <li>Normal Stress in y-direction : {sigma_y}</li>
     <li>Normal Stress in z-direction : {sigma_z}</li>
@@ -295,6 +315,13 @@ def is_additional(additional) :
     <li>Shear Strain is xy plane : {gama_xy}</li>
     <li>Shear Strain is yz plane : {gama_yz}</li>
     <li>Shear Strain is xz plane : {gama_xz}</li>
+</ul>
+<br>
+<h3>Calculations</h3>
+<br>
+<ul>
+    <li>{A}</li>
+    <li>Strain Energy : {strain_energy}</li>
     <li>First Principal Normal Stress : {sigma_1}</li>
     <li>Second Principal Normal Stress : {sigma_2}</li>
     <li>Third Principal Normal Stress : {sigma_3}</li>
